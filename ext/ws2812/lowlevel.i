@@ -1,4 +1,4 @@
-%module ws2812
+%module lowlevel
 
 %{
 #include "lib/ws2812-RPi.h"

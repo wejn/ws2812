@@ -14,9 +14,9 @@ all:
 	ar rc libws2812-RPi.a ws2812-RPi.o
 	ranlib libws2812-RPi.a
 
-shared:
-	gcc -fPIC -c ws2812-RPi.c -DPERI_BASE=$(PERI_BASE) $(RPI2)
-	gcc -shared ws2812-RPi.o -o ws2812-RPi.so	
+#shared:
+#	gcc -fPIC -c ws2812-RPi.c -DPERI_BASE=$(PERI_BASE) $(RPI2)
+#	gcc -shared ws2812-RPi.o -o ws2812-RPi.so	
 
 clean:
 	-rm *.o
