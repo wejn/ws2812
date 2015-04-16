@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-$:.unshift(File.expand_path('../../ext', __FILE__))
 $:.unshift(File.expand_path('../../lib', __FILE__))
 require 'ws2812'
 include Ws2812::Lowlevel
