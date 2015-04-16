@@ -7,7 +7,7 @@ Dir.chdir(File.join(File.dirname(__FILE__), 'lib')) do
 	fail "building lib failed" unless $?.exitstatus.zero?
 end
 system *%w[swig2.0 -Wall -ruby ws2812.i]
-fail "swig failed" unless $?.exitstatus.zero?
+fail "swig failed; perhaps aptitude install swig2.0" unless $?.exitstatus.zero?
 find_library('ws2812-RPi', 'init', 'lib')
 dummy_makefile 'fofoa'
 create_makefile 'ws2812'
