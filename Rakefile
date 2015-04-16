@@ -16,6 +16,8 @@ spec = Gem::Specification.new do |s|
 	s.files = `git ls-files -z`.split("\x0")
 	s.homepage = 'https://rubygems.org/gem/ws2812'
 	s.license = 'GPL'
+	s.add_development_dependency "rake"
+	s.add_development_dependency "rake-compiler"
 end
 
 Gem::PackageTask.new(spec) do |pkg|
@@ -26,4 +28,11 @@ Rake::ExtensionTask.new "ws2812" do |ext|
 	ext.ext_dir = 'ext/ws2812'
 	ext.lib_dir = 'lib/ws2812'
 	ext.gem_spec = spec
+end
+
+task :clobber => :clobber_extras
+task :clobber_extras do
+	Dir.chdir('ext/ws2812/lib') do
+		system('make', 'clean')
+	end
 end
