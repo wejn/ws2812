@@ -13,7 +13,7 @@ spec = Gem::Specification.new do |s|
 	s.description = 'Gem that encapsulates modified RaspberryPi-NeoPixel-WS2812 library from UnicornHat to help drive your WS2812 led chain from RaspberryPi'
 	s.authors = ['Michal Jirků']
 	s.email = 'box@wejn.org'
-	s.files = FileList["lib/**/*"]
+	s.files = `git ls-files -z`.split("\x0")
 	s.homepage = 'https://rubygems.org/gem/ws2812'
 	s.license = 'GPL'
 end
