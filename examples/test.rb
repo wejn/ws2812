@@ -45,6 +45,7 @@ module Ws2812
 			unless resp.zero?
 				raise "init failed with code: " + resp
 			end
+			@open = true
 			self
 		end
 
@@ -68,7 +69,11 @@ module Ws2812
 		end
 
 		def []=(n, color)
-			ws2811_led_set(@channel, n, color.to_i)
+			if n.respond_to?(:to_a)
+				n.to_a.each { |i| ws2811_led_set(@channel, i, color.to_i) }
+			else
+				ws2811_led_set(@channel, n, color.to_i)
+			end
 		end
 
 		def set(n, r, g, b)
@@ -88,27 +93,27 @@ module Ws2812
 		end
 
 		def [](n)
-			Color.from_i(ws2811_led_get(@channel, n))
+			if n.respond_to?(:to_a)
+				n.to_a.map { |i| Color.from_i(ws2811_led_get(@channel, i)) }
+			else
+				Color.from_i(ws2811_led_get(@channel, n))
+			end
 		end
 	end
 end
 
-#init(64)
-#at_exit do
-#	clear
-#	show
-#	terminate(0)
-#end
-##rainbow(5)
-#setBrightness(1)
-#theaterChase(Color(0xff, 0xff, 0x0), 44)
-
-ws = Ws2812::NeoPixel.new(64, 18, 800_000, 5, false, 50, 0)
-ws.open
-ws[0] = Ws2812::Color.new(0xff, 0, 0)
-1.upto(63) do |i|
-	ws[i] = Ws2812::Color.new(0, 0, 0)
+if __FILE__ == $0
+	ws = Ws2812::NeoPixel.new(64, 18, 800_000, 5, false, 50, 0)
+	ws.open
+	ws[0] = Ws2812::Color.new(0xff, 0, 0)
+	ws[(1..63)] = Ws2812::Color.new(0, 0xff, 0)
+	ws.set(1, 0, 0, 0xff)
+	ws.show
+	sleep 1
+	ws.brightness = 100
+	ws.show
+	sleep 1
+	ws.brightness = 50
+	ws.show
+	p ws[(0..63)]
 end
-ws.show
-#sleep 3
-ws.close
