@@ -1,1 +1,0 @@
-lowlevel.i is https://github.com/pimoroni/unicorn-hat/blob/master/python/ws2812/ws2812-RPi.i (with mods)

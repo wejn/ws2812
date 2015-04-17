@@ -1,2 +1,4 @@
+# make sure you have swig2.0 if you're planning to regen
+# lowlevel_wrap.c from lowlevel.i
 ruby extconf.rb
 make

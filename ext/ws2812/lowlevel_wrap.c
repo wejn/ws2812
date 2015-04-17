@@ -1789,11 +1789,20 @@ int SWIG_Ruby_arity( VALUE proc, int minimal )
 
 /* -------- TYPES TABLE (BEGIN) -------- */
 
-#define SWIGTYPE_p_Color_t swig_types[0]
-#define SWIGTYPE_p_char swig_types[1]
-#define SWIGTYPE_p_dma_cb_t swig_types[2]
-static swig_type_info *swig_types[4];
-static swig_module_info swig_module = {swig_types, 3, 0, 0, 0, 0};
+#define SWIGTYPE_p_char swig_types[0]
+#define SWIGTYPE_p_int swig_types[1]
+#define SWIGTYPE_p_long_long swig_types[2]
+#define SWIGTYPE_p_short swig_types[3]
+#define SWIGTYPE_p_signed_char swig_types[4]
+#define SWIGTYPE_p_unsigned_char swig_types[5]
+#define SWIGTYPE_p_unsigned_int swig_types[6]
+#define SWIGTYPE_p_unsigned_long_long swig_types[7]
+#define SWIGTYPE_p_unsigned_short swig_types[8]
+#define SWIGTYPE_p_ws2811_channel_t swig_types[9]
+#define SWIGTYPE_p_ws2811_device swig_types[10]
+#define SWIGTYPE_p_ws2811_t swig_types[11]
+static swig_type_info *swig_types[13];
+static swig_module_info swig_module = {swig_types, 12, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -1816,7 +1825,10 @@ static VALUE mLowlevel;
 #define SWIG_as_voidptrptr(a) ((void)SWIG_as_voidptr(*a),(void**)(a)) 
 
 
-#include "lib/ws2812-RPi.h"
+#include <stdint.h>		// Use the C99 official header
+
+
+#include "ws2811.h"
 
 
 #include <limits.h>
@@ -1829,73 +1841,21 @@ static VALUE mLowlevel;
 #endif
 
 
+  #define SWIG_From_long   LONG2NUM 
+
+
+SWIGINTERNINLINE VALUE
+SWIG_From_int  (int value)
+{    
+  return SWIG_From_long  (value);
+}
+
+
 SWIGINTERN VALUE
 SWIG_ruby_failed(void)
 {
   return Qnil;
 } 
-
-
-/*@SWIG:/usr/share/swig2.0/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
-SWIGINTERN VALUE SWIG_AUX_NUM2ULONG(VALUE *args)
-{
-  VALUE obj = args[0];
-  VALUE type = TYPE(obj);
-  unsigned long *res = (unsigned long *)(args[1]);
-  *res = type == T_FIXNUM ? NUM2ULONG(obj) : rb_big2ulong(obj);
-  return obj;
-}
-/*@SWIG@*/
-
-SWIGINTERN int
-SWIG_AsVal_unsigned_SS_long (VALUE obj, unsigned long *val) 
-{
-  VALUE type = TYPE(obj);
-  if ((type == T_FIXNUM) || (type == T_BIGNUM)) {
-    unsigned long v;
-    VALUE a[2];
-    a[0] = obj;
-    a[1] = (VALUE)(&v);
-    if (rb_rescue(RUBY_METHOD_FUNC(SWIG_AUX_NUM2ULONG), (VALUE)a, RUBY_METHOD_FUNC(SWIG_ruby_failed), 0) != Qnil) {
-      if (val) *val = v;
-      return SWIG_OK;
-    }
-  }
-  return SWIG_TypeError;
-}
-
-
-SWIGINTERN int
-SWIG_AsVal_unsigned_SS_char (VALUE obj, unsigned char *val)
-{
-  unsigned long v;
-  int res = SWIG_AsVal_unsigned_SS_long (obj, &v);
-  if (SWIG_IsOK(res)) {
-    if ((v > UCHAR_MAX)) {
-      return SWIG_OverflowError;
-    } else {
-      if (val) *val = (unsigned char)(v);
-    }
-  }  
-  return res;
-}
-
-
-  #define SWIG_From_long   LONG2NUM 
-
-
-SWIGINTERNINLINE VALUE
-SWIG_From_unsigned_SS_long  (unsigned long value)
-{
-  return ULONG2NUM(value); 
-}
-
-
-SWIGINTERNINLINE VALUE
-SWIG_From_unsigned_SS_char  (unsigned char value)
-{    
-  return SWIG_From_unsigned_SS_long  (value);
-}
 
 
 /*@SWIG:/usr/share/swig2.0/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
@@ -1944,35 +1904,32 @@ SWIG_AsVal_int (VALUE obj, int *val)
 
 
 /*@SWIG:/usr/share/swig2.0/ruby/rubyprimtypes.swg,19,%ruby_aux_method@*/
-SWIGINTERN VALUE SWIG_AUX_NUM2DBL(VALUE *args)
+SWIGINTERN VALUE SWIG_AUX_NUM2ULONG(VALUE *args)
 {
   VALUE obj = args[0];
   VALUE type = TYPE(obj);
-  double *res = (double *)(args[1]);
-  *res = NUM2DBL(obj);
+  unsigned long *res = (unsigned long *)(args[1]);
+  *res = type == T_FIXNUM ? NUM2ULONG(obj) : rb_big2ulong(obj);
   return obj;
 }
 /*@SWIG@*/
 
 SWIGINTERN int
-SWIG_AsVal_double (VALUE obj, double *val)
+SWIG_AsVal_unsigned_SS_long (VALUE obj, unsigned long *val) 
 {
   VALUE type = TYPE(obj);
-  if ((type == T_FLOAT) || (type == T_FIXNUM) || (type == T_BIGNUM)) {
-    double v;
+  if ((type == T_FIXNUM) || (type == T_BIGNUM)) {
+    unsigned long v;
     VALUE a[2];
     a[0] = obj;
     a[1] = (VALUE)(&v);
-    if (rb_rescue(RUBY_METHOD_FUNC(SWIG_AUX_NUM2DBL), (VALUE)a, RUBY_METHOD_FUNC(SWIG_ruby_failed), 0) != Qnil) {
+    if (rb_rescue(RUBY_METHOD_FUNC(SWIG_AUX_NUM2ULONG), (VALUE)a, RUBY_METHOD_FUNC(SWIG_ruby_failed), 0) != Qnil) {
       if (val) *val = v;
       return SWIG_OK;
     }
   }
   return SWIG_TypeError;
 }
-
-
-  #define SWIG_From_double   rb_float_new 
 
 
 SWIGINTERN int
@@ -1992,36 +1949,71 @@ SWIG_AsVal_unsigned_SS_int (VALUE obj, unsigned int *val)
 
 
 SWIGINTERNINLINE VALUE
+SWIG_From_unsigned_SS_long  (unsigned long value)
+{
+  return ULONG2NUM(value); 
+}
+
+
+SWIGINTERNINLINE VALUE
 SWIG_From_unsigned_SS_int  (unsigned int value)
 {    
   return SWIG_From_unsigned_SS_long  (value);
 }
 
-static swig_class SwigClassColor_t;
+
+    uint32_t ws2811_led_get(ws2811_channel_t *channel, int lednum)
+    {
+        if (lednum >= channel->count)
+        {
+            return -1;
+        }
+
+        return channel->leds[lednum];
+    }
+
+    int ws2811_led_set(ws2811_channel_t *channel, int lednum, uint32_t color)
+    {
+        if (lednum >= channel->count)
+        {
+            return -1;
+        }
+
+        channel->leds[lednum] = color;
+
+        return 0;
+    }
+
+    ws2811_channel_t *ws2811_channel_get(ws2811_t *ws, int channelnum)
+    {
+        return &ws->channel[channelnum];
+    }
+
+static swig_class SwigClassWs2811_channel_t;
 
 SWIGINTERN VALUE
-_wrap_Color_t_r_set(int argc, VALUE *argv, VALUE self) {
-  Color_t *arg1 = (Color_t *) 0 ;
-  unsigned char arg2 ;
+_wrap_ws2811_channel_t_gpionum_set(int argc, VALUE *argv, VALUE self) {
+  ws2811_channel_t *arg1 = (ws2811_channel_t *) 0 ;
+  int arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned char val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Color_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_ws2811_channel_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Color_t *","r", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_channel_t *","gpionum", 1, self )); 
   }
-  arg1 = (Color_t *)(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[0], &val2);
+  arg1 = (ws2811_channel_t *)(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "unsigned char","r", 2, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","gpionum", 2, argv[0] ));
   } 
-  arg2 = (unsigned char)(val2);
-  if (arg1) (arg1)->r = arg2;
+  arg2 = (int)(val2);
+  if (arg1) (arg1)->gpionum = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -2029,23 +2021,23 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Color_t_r_get(int argc, VALUE *argv, VALUE self) {
-  Color_t *arg1 = (Color_t *) 0 ;
+_wrap_ws2811_channel_t_gpionum_get(int argc, VALUE *argv, VALUE self) {
+  ws2811_channel_t *arg1 = (ws2811_channel_t *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned char result;
+  int result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Color_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_ws2811_channel_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Color_t *","r", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_channel_t *","gpionum", 1, self )); 
   }
-  arg1 = (Color_t *)(argp1);
-  result = (unsigned char) ((arg1)->r);
-  vresult = SWIG_From_unsigned_SS_char((unsigned char)(result));
+  arg1 = (ws2811_channel_t *)(argp1);
+  result = (int) ((arg1)->gpionum);
+  vresult = SWIG_From_int((int)(result));
   return vresult;
 fail:
   return Qnil;
@@ -2053,28 +2045,28 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Color_t_g_set(int argc, VALUE *argv, VALUE self) {
-  Color_t *arg1 = (Color_t *) 0 ;
-  unsigned char arg2 ;
+_wrap_ws2811_channel_t_invert_set(int argc, VALUE *argv, VALUE self) {
+  ws2811_channel_t *arg1 = (ws2811_channel_t *) 0 ;
+  int arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned char val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Color_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_ws2811_channel_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Color_t *","g", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_channel_t *","invert", 1, self )); 
   }
-  arg1 = (Color_t *)(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[0], &val2);
+  arg1 = (ws2811_channel_t *)(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "unsigned char","g", 2, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","invert", 2, argv[0] ));
   } 
-  arg2 = (unsigned char)(val2);
-  if (arg1) (arg1)->g = arg2;
+  arg2 = (int)(val2);
+  if (arg1) (arg1)->invert = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -2082,23 +2074,23 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Color_t_g_get(int argc, VALUE *argv, VALUE self) {
-  Color_t *arg1 = (Color_t *) 0 ;
+_wrap_ws2811_channel_t_invert_get(int argc, VALUE *argv, VALUE self) {
+  ws2811_channel_t *arg1 = (ws2811_channel_t *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned char result;
+  int result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Color_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_ws2811_channel_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Color_t *","g", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_channel_t *","invert", 1, self )); 
   }
-  arg1 = (Color_t *)(argp1);
-  result = (unsigned char) ((arg1)->g);
-  vresult = SWIG_From_unsigned_SS_char((unsigned char)(result));
+  arg1 = (ws2811_channel_t *)(argp1);
+  result = (int) ((arg1)->invert);
+  vresult = SWIG_From_int((int)(result));
   return vresult;
 fail:
   return Qnil;
@@ -2106,28 +2098,28 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Color_t_b_set(int argc, VALUE *argv, VALUE self) {
-  Color_t *arg1 = (Color_t *) 0 ;
-  unsigned char arg2 ;
+_wrap_ws2811_channel_t_count_set(int argc, VALUE *argv, VALUE self) {
+  ws2811_channel_t *arg1 = (ws2811_channel_t *) 0 ;
+  int arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned char val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Color_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_ws2811_channel_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Color_t *","b", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_channel_t *","count", 1, self )); 
   }
-  arg1 = (Color_t *)(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[0], &val2);
+  arg1 = (ws2811_channel_t *)(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "unsigned char","b", 2, argv[0] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","count", 2, argv[0] ));
   } 
-  arg2 = (unsigned char)(val2);
-  if (arg1) (arg1)->b = arg2;
+  arg2 = (int)(val2);
+  if (arg1) (arg1)->count = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -2135,23 +2127,129 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_Color_t_b_get(int argc, VALUE *argv, VALUE self) {
-  Color_t *arg1 = (Color_t *) 0 ;
+_wrap_ws2811_channel_t_count_get(int argc, VALUE *argv, VALUE self) {
+  ws2811_channel_t *arg1 = (ws2811_channel_t *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned char result;
+  int result;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_Color_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_ws2811_channel_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Color_t *","b", 1, self )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_channel_t *","count", 1, self )); 
   }
-  arg1 = (Color_t *)(argp1);
-  result = (unsigned char) ((arg1)->b);
-  vresult = SWIG_From_unsigned_SS_char((unsigned char)(result));
+  arg1 = (ws2811_channel_t *)(argp1);
+  result = (int) ((arg1)->count);
+  vresult = SWIG_From_int((int)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_ws2811_channel_t_brightness_set(int argc, VALUE *argv, VALUE self) {
+  ws2811_channel_t *arg1 = (ws2811_channel_t *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_ws2811_channel_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_channel_t *","brightness", 1, self )); 
+  }
+  arg1 = (ws2811_channel_t *)(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","brightness", 2, argv[0] ));
+  } 
+  arg2 = (int)(val2);
+  if (arg1) (arg1)->brightness = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_ws2811_channel_t_brightness_get(int argc, VALUE *argv, VALUE self) {
+  ws2811_channel_t *arg1 = (ws2811_channel_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_ws2811_channel_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_channel_t *","brightness", 1, self )); 
+  }
+  arg1 = (ws2811_channel_t *)(argp1);
+  result = (int) ((arg1)->brightness);
+  vresult = SWIG_From_int((int)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_ws2811_channel_t_leds_set(int argc, VALUE *argv, VALUE self) {
+  ws2811_channel_t *arg1 = (ws2811_channel_t *) 0 ;
+  ws2811_led_t *arg2 = (ws2811_led_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_ws2811_channel_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_channel_t *","leds", 1, self )); 
+  }
+  arg1 = (ws2811_channel_t *)(argp1);
+  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_unsigned_int, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "ws2811_led_t *","leds", 2, argv[0] )); 
+  }
+  arg2 = (ws2811_led_t *)(argp2);
+  if (arg1) (arg1)->leds = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_ws2811_channel_t_leds_get(int argc, VALUE *argv, VALUE self) {
+  ws2811_channel_t *arg1 = (ws2811_channel_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ws2811_led_t *result = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_ws2811_channel_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_channel_t *","leds", 1, self )); 
+  }
+  arg1 = (ws2811_channel_t *)(argp1);
+  result = (ws2811_led_t *) ((arg1)->leds);
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_unsigned_int, 0 |  0 );
   return vresult;
 fail:
   return Qnil;
@@ -2160,14 +2258,14 @@ fail:
 
 #ifdef HAVE_RB_DEFINE_ALLOC_FUNC
 SWIGINTERN VALUE
-_wrap_Color_t_allocate(VALUE self) {
+_wrap_ws2811_channel_t_allocate(VALUE self) {
 #else
   SWIGINTERN VALUE
-  _wrap_Color_t_allocate(int argc, VALUE *argv, VALUE self) {
+  _wrap_ws2811_channel_t_allocate(int argc, VALUE *argv, VALUE self) {
 #endif
     
     
-    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_Color_t);
+    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_ws2811_channel_t);
 #ifndef HAVE_RB_DEFINE_ALLOC_FUNC
     rb_obj_call_init(vresult, argc, argv);
 #endif
@@ -2176,13 +2274,13 @@ _wrap_Color_t_allocate(VALUE self) {
   
 
 SWIGINTERN VALUE
-_wrap_new_Color_t(int argc, VALUE *argv, VALUE self) {
-  Color_t *result = 0 ;
+_wrap_new_ws2811_channel_t(int argc, VALUE *argv, VALUE self) {
+  ws2811_channel_t *result = 0 ;
   
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
-  result = (Color_t *)calloc(1, sizeof(Color_t));
+  result = (ws2811_channel_t *)calloc(1, sizeof(ws2811_channel_t));
   DATA_PTR(self) = result;
   return self;
 fail:
@@ -2191,451 +2289,111 @@ fail:
 
 
 SWIGINTERN void
-free_Color_t(Color_t *arg1) {
+free_ws2811_channel_t(ws2811_channel_t *arg1) {
     free((char *) arg1);
 }
 
-SWIGINTERN VALUE
-_wrap_init(int argc, VALUE *argv, VALUE self) {
-  int arg1 ;
-  int val1 ;
-  int ecode1 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  ecode1 = SWIG_AsVal_int(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "int","init", 1, argv[0] ));
-  } 
-  arg1 = (int)(val1);
-  init(arg1);
-  return Qnil;
-fail:
-  return Qnil;
-}
-
+static swig_class SwigClassWs2811_t;
 
 SWIGINTERN VALUE
-_wrap_clear(int argc, VALUE *argv, VALUE self) {
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  clear();
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_show(int argc, VALUE *argv, VALUE self) {
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  show();
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_Wheel(int argc, VALUE *argv, VALUE self) {
-  uint8_t arg1 ;
-  unsigned char val1 ;
-  int ecode1 = 0 ;
-  Color_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  ecode1 = SWIG_AsVal_unsigned_SS_char(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "uint8_t","Wheel", 1, argv[0] ));
-  } 
-  arg1 = (uint8_t)(val1);
-  result = Wheel(arg1);
-  vresult = SWIG_NewPointerObj((Color_t *)memcpy((Color_t *)malloc(sizeof(Color_t)),&result,sizeof(Color_t)), SWIGTYPE_p_Color_t, SWIG_POINTER_OWN |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_colorWipe(int argc, VALUE *argv, VALUE self) {
-  Color_t arg1 ;
-  uint8_t arg2 ;
-  void *argp1 ;
+_wrap_ws2811_t_device_set(int argc, VALUE *argv, VALUE self) {
+  ws2811_t *arg1 = (ws2811_t *) 0 ;
+  struct ws2811_device *arg2 = (struct ws2811_device *) 0 ;
+  void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
-  
-  if ((argc < 2) || (argc > 2)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
-  }
-  {
-    res1 = SWIG_ConvertPtr(argv[0], &argp1, SWIGTYPE_p_Color_t,  0 );
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Color_t","colorWipe", 1, argv[0] )); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "Color_t","colorWipe", 1, argv[0]));
-    } else {
-      arg1 = *((Color_t *)(argp1));
-    }
-  }
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "uint8_t","colorWipe", 2, argv[1] ));
-  } 
-  arg2 = (uint8_t)(val2);
-  colorWipe(arg1,arg2);
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_rainbow(int argc, VALUE *argv, VALUE self) {
-  uint8_t arg1 ;
-  unsigned char val1 ;
-  int ecode1 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  ecode1 = SWIG_AsVal_unsigned_SS_char(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "uint8_t","rainbow", 1, argv[0] ));
-  } 
-  arg1 = (uint8_t)(val1);
-  rainbow(arg1);
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_rainbowCycle(int argc, VALUE *argv, VALUE self) {
-  uint8_t arg1 ;
-  unsigned char val1 ;
-  int ecode1 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  ecode1 = SWIG_AsVal_unsigned_SS_char(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "uint8_t","rainbowCycle", 1, argv[0] ));
-  } 
-  arg1 = (uint8_t)(val1);
-  rainbowCycle(arg1);
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_theaterChase(int argc, VALUE *argv, VALUE self) {
-  Color_t arg1 ;
-  uint8_t arg2 ;
-  void *argp1 ;
-  int res1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
-  
-  if ((argc < 2) || (argc > 2)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
-  }
-  {
-    res1 = SWIG_ConvertPtr(argv[0], &argp1, SWIGTYPE_p_Color_t,  0 );
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "Color_t","theaterChase", 1, argv[0] )); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "Color_t","theaterChase", 1, argv[0]));
-    } else {
-      arg1 = *((Color_t *)(argp1));
-    }
-  }
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "uint8_t","theaterChase", 2, argv[1] ));
-  } 
-  arg2 = (uint8_t)(val2);
-  theaterChase(arg1,arg2);
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_theaterChaseRainbow(int argc, VALUE *argv, VALUE self) {
-  uint8_t arg1 ;
-  unsigned char val1 ;
-  int ecode1 = 0 ;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  ecode1 = SWIG_AsVal_unsigned_SS_char(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "uint8_t","theaterChaseRainbow", 1, argv[0] ));
-  } 
-  arg1 = (uint8_t)(val1);
-  theaterChaseRainbow(arg1);
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_setBrightness(int argc, VALUE *argv, VALUE self) {
-  double arg1 ;
-  double val1 ;
-  int ecode1 = 0 ;
-  unsigned char result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  ecode1 = SWIG_AsVal_double(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "double","setBrightness", 1, argv[0] ));
-  } 
-  arg1 = (double)(val1);
-  result = (unsigned char)setBrightness(arg1);
-  vresult = SWIG_From_unsigned_SS_char((unsigned char)(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_getBrightness(int argc, VALUE *argv, VALUE self) {
-  double result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  result = (double)getBrightness();
-  vresult = SWIG_From_double((double)(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_RGB2Color(int argc, VALUE *argv, VALUE self) {
-  unsigned char arg1 ;
-  unsigned char arg2 ;
-  unsigned char arg3 ;
-  unsigned char val1 ;
-  int ecode1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
-  unsigned char val3 ;
-  int ecode3 = 0 ;
-  Color_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 3) || (argc > 3)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
-  }
-  ecode1 = SWIG_AsVal_unsigned_SS_char(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "unsigned char","RGB2Color", 1, argv[0] ));
-  } 
-  arg1 = (unsigned char)(val1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "unsigned char","RGB2Color", 2, argv[1] ));
-  } 
-  arg2 = (unsigned char)(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_char(argv[2], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "unsigned char","RGB2Color", 3, argv[2] ));
-  } 
-  arg3 = (unsigned char)(val3);
-  result = RGB2Color(arg1,arg2,arg3);
-  vresult = SWIG_NewPointerObj((Color_t *)memcpy((Color_t *)malloc(sizeof(Color_t)),&result,sizeof(Color_t)), SWIGTYPE_p_Color_t, SWIG_POINTER_OWN |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_Color(int argc, VALUE *argv, VALUE self) {
-  unsigned char arg1 ;
-  unsigned char arg2 ;
-  unsigned char arg3 ;
-  unsigned char val1 ;
-  int ecode1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
-  unsigned char val3 ;
-  int ecode3 = 0 ;
-  Color_t result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 3) || (argc > 3)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
-  }
-  ecode1 = SWIG_AsVal_unsigned_SS_char(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "unsigned char","Color", 1, argv[0] ));
-  } 
-  arg1 = (unsigned char)(val1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "unsigned char","Color", 2, argv[1] ));
-  } 
-  arg2 = (unsigned char)(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_char(argv[2], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "unsigned char","Color", 3, argv[2] ));
-  } 
-  arg3 = (unsigned char)(val3);
-  result = Color(arg1,arg2,arg3);
-  vresult = SWIG_NewPointerObj((Color_t *)memcpy((Color_t *)malloc(sizeof(Color_t)),&result,sizeof(Color_t)), SWIGTYPE_p_Color_t, SWIG_POINTER_OWN |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_setPixelColor(int argc, VALUE *argv, VALUE self) {
-  unsigned int arg1 ;
-  unsigned char arg2 ;
-  unsigned char arg3 ;
-  unsigned char arg4 ;
-  unsigned int val1 ;
-  int ecode1 = 0 ;
-  unsigned char val2 ;
-  int ecode2 = 0 ;
-  unsigned char val3 ;
-  int ecode3 = 0 ;
-  unsigned char val4 ;
-  int ecode4 = 0 ;
-  unsigned char result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 4) || (argc > 4)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 4)",argc); SWIG_fail;
-  }
-  ecode1 = SWIG_AsVal_unsigned_SS_int(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "unsigned int","setPixelColor", 1, argv[0] ));
-  } 
-  arg1 = (unsigned int)(val1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "unsigned char","setPixelColor", 2, argv[1] ));
-  } 
-  arg2 = (unsigned char)(val2);
-  ecode3 = SWIG_AsVal_unsigned_SS_char(argv[2], &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "unsigned char","setPixelColor", 3, argv[2] ));
-  } 
-  arg3 = (unsigned char)(val3);
-  ecode4 = SWIG_AsVal_unsigned_SS_char(argv[3], &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), Ruby_Format_TypeError( "", "unsigned char","setPixelColor", 4, argv[3] ));
-  } 
-  arg4 = (unsigned char)(val4);
-  result = (unsigned char)setPixelColor(arg1,arg2,arg3,arg4);
-  vresult = SWIG_From_unsigned_SS_char((unsigned char)(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_setPixelColorT(int argc, VALUE *argv, VALUE self) {
-  unsigned int arg1 ;
-  Color_t arg2 ;
-  unsigned int val1 ;
-  int ecode1 = 0 ;
-  void *argp2 ;
+  void *argp2 = 0 ;
   int res2 = 0 ;
-  unsigned char result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 2) || (argc > 2)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
-  }
-  ecode1 = SWIG_AsVal_unsigned_SS_int(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "unsigned int","setPixelColorT", 1, argv[0] ));
-  } 
-  arg1 = (unsigned int)(val1);
-  {
-    res2 = SWIG_ConvertPtr(argv[1], &argp2, SWIGTYPE_p_Color_t,  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "Color_t","setPixelColorT", 2, argv[1] )); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, Ruby_Format_TypeError("invalid null reference ", "Color_t","setPixelColorT", 2, argv[1]));
-    } else {
-      arg2 = *((Color_t *)(argp2));
-    }
-  }
-  result = (unsigned char)setPixelColorT(arg1,arg2);
-  vresult = SWIG_From_unsigned_SS_char((unsigned char)(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_getPixelColor(int argc, VALUE *argv, VALUE self) {
-  unsigned int arg1 ;
-  unsigned int val1 ;
-  int ecode1 = 0 ;
-  Color_t result;
-  VALUE vresult = Qnil;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  ecode1 = SWIG_AsVal_unsigned_SS_int(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "unsigned int","getPixelColor", 1, argv[0] ));
-  } 
-  arg1 = (unsigned int)(val1);
-  result = getPixelColor(arg1);
-  vresult = SWIG_NewPointerObj((Color_t *)memcpy((Color_t *)malloc(sizeof(Color_t)),&result,sizeof(Color_t)), SWIGTYPE_p_Color_t, SWIG_POINTER_OWN |  0 );
-  return vresult;
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_ws2811_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_t *","device", 1, self )); 
+  }
+  arg1 = (ws2811_t *)(argp1);
+  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_ws2811_device, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "struct ws2811_device *","device", 2, argv[0] )); 
+  }
+  arg2 = (struct ws2811_device *)(argp2);
+  if (arg1) (arg1)->device = arg2;
+  return Qnil;
 fail:
   return Qnil;
 }
 
 
 SWIGINTERN VALUE
-_wrap_numPixels(int argc, VALUE *argv, VALUE self) {
-  unsigned int result;
+_wrap_ws2811_t_device_get(int argc, VALUE *argv, VALUE self) {
+  ws2811_t *arg1 = (ws2811_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  struct ws2811_device *result = 0 ;
   VALUE vresult = Qnil;
   
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
-  result = (unsigned int)numPixels();
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_ws2811_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_t *","device", 1, self )); 
+  }
+  arg1 = (ws2811_t *)(argp1);
+  result = (struct ws2811_device *) ((arg1)->device);
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_ws2811_device, 0 |  0 );
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_ws2811_t_freq_set(int argc, VALUE *argv, VALUE self) {
+  ws2811_t *arg1 = (ws2811_t *) 0 ;
+  uint32_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned int val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_ws2811_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_t *","freq", 1, self )); 
+  }
+  arg1 = (ws2811_t *)(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "uint32_t","freq", 2, argv[0] ));
+  } 
+  arg2 = (uint32_t)(val2);
+  if (arg1) (arg1)->freq = arg2;
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_ws2811_t_freq_get(int argc, VALUE *argv, VALUE self) {
+  ws2811_t *arg1 = (ws2811_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_ws2811_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_t *","freq", 1, self )); 
+  }
+  arg1 = (ws2811_t *)(argp1);
+  result = (uint32_t) ((arg1)->freq);
   vresult = SWIG_From_unsigned_SS_int((unsigned int)(result));
   return vresult;
 fail:
@@ -2644,44 +2402,28 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_getPixels(int argc, VALUE *argv, VALUE self) {
-  Color_t *result = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  result = (Color_t *)getPixels();
-  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_Color_t, 0 |  0 );
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_setPWMBit(int argc, VALUE *argv, VALUE self) {
-  unsigned int arg1 ;
-  unsigned char arg2 ;
-  unsigned int val1 ;
-  int ecode1 = 0 ;
-  unsigned char val2 ;
+_wrap_ws2811_t_dmanum_set(int argc, VALUE *argv, VALUE self) {
+  ws2811_t *arg1 = (ws2811_t *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
   int ecode2 = 0 ;
   
-  if ((argc < 2) || (argc > 2)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  ecode1 = SWIG_AsVal_unsigned_SS_int(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "unsigned int","setPWMBit", 1, argv[0] ));
-  } 
-  arg1 = (unsigned int)(val1);
-  ecode2 = SWIG_AsVal_unsigned_SS_char(argv[1], &val2);
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_ws2811_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_t *","dmanum", 1, self )); 
+  }
+  arg1 = (ws2811_t *)(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "unsigned char","setPWMBit", 2, argv[1] ));
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","dmanum", 2, argv[0] ));
   } 
-  arg2 = (unsigned char)(val2);
-  setPWMBit(arg1,arg2);
+  arg2 = (int)(val2);
+  if (arg1) (arg1)->dmanum = arg2;
   return Qnil;
 fail:
   return Qnil;
@@ -2689,23 +2431,23 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_getPWMBit(int argc, VALUE *argv, VALUE self) {
-  unsigned int arg1 ;
-  unsigned int val1 ;
-  int ecode1 = 0 ;
-  unsigned char result;
+_wrap_ws2811_t_dmanum_get(int argc, VALUE *argv, VALUE self) {
+  ws2811_t *arg1 = (ws2811_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int result;
   VALUE vresult = Qnil;
   
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
-  ecode1 = SWIG_AsVal_unsigned_SS_int(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "unsigned int","getPWMBit", 1, argv[0] ));
-  } 
-  arg1 = (unsigned int)(val1);
-  result = (unsigned char)getPWMBit(arg1);
-  vresult = SWIG_From_unsigned_SS_char((unsigned char)(result));
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_ws2811_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_t *","dmanum", 1, self )); 
+  }
+  arg1 = (ws2811_t *)(argp1);
+  result = (int) ((arg1)->dmanum);
+  vresult = SWIG_From_int((int)(result));
   return vresult;
 fail:
   return Qnil;
@@ -2713,56 +2455,35 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_dumpLEDBuffer(int argc, VALUE *argv, VALUE self) {
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  dumpLEDBuffer();
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_dumpPWMBuffer(int argc, VALUE *argv, VALUE self) {
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  dumpPWMBuffer();
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_dumpPWMStatus(int argc, VALUE *argv, VALUE self) {
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  dumpPWMStatus();
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_dumpPWMControl(int argc, VALUE *argv, VALUE self) {
-  unsigned int arg1 ;
-  unsigned int val1 ;
-  int ecode1 = 0 ;
+_wrap_ws2811_t_channel_set(int argc, VALUE *argv, VALUE self) {
+  ws2811_t *arg1 = (ws2811_t *) 0 ;
+  ws2811_channel_t *arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  ecode1 = SWIG_AsVal_unsigned_SS_int(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "unsigned int","dumpPWMControl", 1, argv[0] ));
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_ws2811_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_t *","channel", 1, self )); 
+  }
+  arg1 = (ws2811_t *)(argp1);
+  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_ws2811_channel_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), Ruby_Format_TypeError( "", "ws2811_channel_t [RPI_PWM_CHANNELS]","channel", 2, argv[0] )); 
   } 
-  arg1 = (unsigned int)(val1);
-  dumpPWMControl(arg1);
+  arg2 = (ws2811_channel_t *)(argp2);
+  {
+    if (arg2) {
+      size_t ii = 0;
+      for (; ii < (size_t)RPI_PWM_CHANNELS; ++ii) arg1->channel[ii] = arg2[ii];
+    } else {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in variable '""channel""' of type '""ws2811_channel_t [RPI_PWM_CHANNELS]""'");
+    }
+  }
   return Qnil;
 fail:
   return Qnil;
@@ -2770,56 +2491,105 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_dumpPWMDMAC(int argc, VALUE *argv, VALUE self) {
+_wrap_ws2811_t_channel_get(int argc, VALUE *argv, VALUE self) {
+  ws2811_t *arg1 = (ws2811_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  ws2811_channel_t *result = 0 ;
+  VALUE vresult = Qnil;
+  
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
-  dumpPWMDMAC();
-  return Qnil;
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_ws2811_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_t *","channel", 1, self )); 
+  }
+  arg1 = (ws2811_t *)(argp1);
+  result = (ws2811_channel_t *)(ws2811_channel_t *) ((arg1)->channel);
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_ws2811_channel_t, 0 |  0 );
+  return vresult;
 fail:
   return Qnil;
 }
 
 
+#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
 SWIGINTERN VALUE
-_wrap_dumpPWM(int argc, VALUE *argv, VALUE self) {
+_wrap_ws2811_t_allocate(VALUE self) {
+#else
+  SWIGINTERN VALUE
+  _wrap_ws2811_t_allocate(int argc, VALUE *argv, VALUE self) {
+#endif
+    
+    
+    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_ws2811_t);
+#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
+    rb_obj_call_init(vresult, argc, argv);
+#endif
+    return vresult;
+  }
+  
+
+SWIGINTERN VALUE
+_wrap_new_ws2811_t(int argc, VALUE *argv, VALUE self) {
+  ws2811_t *result = 0 ;
+  
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
   }
-  dumpPWM();
-  return Qnil;
+  result = (ws2811_t *)calloc(1, sizeof(ws2811_t));
+  DATA_PTR(self) = result;
+  return self;
 fail:
   return Qnil;
 }
 
 
+SWIGINTERN void
+free_ws2811_t(ws2811_t *arg1) {
+    free((char *) arg1);
+}
+
 SWIGINTERN VALUE
-_wrap_dumpDMARegs(int argc, VALUE *argv, VALUE self) {
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+_wrap_ws2811_init(int argc, VALUE *argv, VALUE self) {
+  ws2811_t *arg1 = (ws2811_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  dumpDMARegs();
-  return Qnil;
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_ws2811_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_t *","ws2811_init", 1, argv[0] )); 
+  }
+  arg1 = (ws2811_t *)(argp1);
+  result = (int)ws2811_init(arg1);
+  vresult = SWIG_From_int((int)(result));
+  return vresult;
 fail:
   return Qnil;
 }
 
 
 SWIGINTERN VALUE
-_wrap_dumpControlBlock(int argc, VALUE *argv, VALUE self) {
-  dma_cb_t *arg1 = (dma_cb_t *) 0 ;
+_wrap_ws2811_fini(int argc, VALUE *argv, VALUE self) {
+  ws2811_t *arg1 = (ws2811_t *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_dma_cb_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_ws2811_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "dma_cb_t *","dumpControlBlock", 1, argv[0] )); 
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_t *","ws2811_fini", 1, argv[0] )); 
   }
-  arg1 = (dma_cb_t *)(argp1);
-  dumpControlBlock(arg1);
+  arg1 = (ws2811_t *)(argp1);
+  ws2811_fini(arg1);
   return Qnil;
 fail:
   return Qnil;
@@ -2827,54 +2597,152 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_dumpTransferInformation(int argc, VALUE *argv, VALUE self) {
-  unsigned int arg1 ;
-  unsigned int val1 ;
-  int ecode1 = 0 ;
+_wrap_ws2811_render(int argc, VALUE *argv, VALUE self) {
+  ws2811_t *arg1 = (ws2811_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int result;
+  VALUE vresult = Qnil;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  ecode1 = SWIG_AsVal_unsigned_SS_int(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "unsigned int","dumpTransferInformation", 1, argv[0] ));
-  } 
-  arg1 = (unsigned int)(val1);
-  dumpTransferInformation(arg1);
-  return Qnil;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_dumpDMA(int argc, VALUE *argv, VALUE self) {
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_ws2811_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_t *","ws2811_render", 1, argv[0] )); 
   }
-  dumpDMA();
-  return Qnil;
+  arg1 = (ws2811_t *)(argp1);
+  result = (int)ws2811_render(arg1);
+  vresult = SWIG_From_int((int)(result));
+  return vresult;
 fail:
   return Qnil;
 }
 
 
 SWIGINTERN VALUE
-_wrap_terminate(int argc, VALUE *argv, VALUE self) {
-  int arg1 ;
-  int val1 ;
-  int ecode1 = 0 ;
+_wrap_ws2811_wait(int argc, VALUE *argv, VALUE self) {
+  ws2811_t *arg1 = (ws2811_t *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int result;
+  VALUE vresult = Qnil;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  ecode1 = SWIG_AsVal_int(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "int","terminate", 1, argv[0] ));
-  } 
-  arg1 = (int)(val1);
-  terminate(arg1);
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_ws2811_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_t *","ws2811_wait", 1, argv[0] )); 
+  }
+  arg1 = (ws2811_t *)(argp1);
+  result = (int)ws2811_wait(arg1);
+  vresult = SWIG_From_int((int)(result));
+  return vresult;
+fail:
   return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_ws2811_led_get(int argc, VALUE *argv, VALUE self) {
+  ws2811_channel_t *arg1 = (ws2811_channel_t *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  uint32_t result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_ws2811_channel_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_channel_t *","ws2811_led_get", 1, argv[0] )); 
+  }
+  arg1 = (ws2811_channel_t *)(argp1);
+  ecode2 = SWIG_AsVal_int(argv[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","ws2811_led_get", 2, argv[1] ));
+  } 
+  arg2 = (int)(val2);
+  result = (uint32_t)ws2811_led_get(arg1,arg2);
+  vresult = SWIG_From_unsigned_SS_int((unsigned int)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_ws2811_led_set(int argc, VALUE *argv, VALUE self) {
+  ws2811_channel_t *arg1 = (ws2811_channel_t *) 0 ;
+  int arg2 ;
+  uint32_t arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  unsigned int val3 ;
+  int ecode3 = 0 ;
+  int result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 3) || (argc > 3)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 3)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_ws2811_channel_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_channel_t *","ws2811_led_set", 1, argv[0] )); 
+  }
+  arg1 = (ws2811_channel_t *)(argp1);
+  ecode2 = SWIG_AsVal_int(argv[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","ws2811_led_set", 2, argv[1] ));
+  } 
+  arg2 = (int)(val2);
+  ecode3 = SWIG_AsVal_unsigned_SS_int(argv[2], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), Ruby_Format_TypeError( "", "uint32_t","ws2811_led_set", 3, argv[2] ));
+  } 
+  arg3 = (uint32_t)(val3);
+  result = (int)ws2811_led_set(arg1,arg2,arg3);
+  vresult = SWIG_From_int((int)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_ws2811_channel_get(int argc, VALUE *argv, VALUE self) {
+  ws2811_t *arg1 = (ws2811_t *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  ws2811_channel_t *result = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_ws2811_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), Ruby_Format_TypeError( "", "ws2811_t *","ws2811_channel_get", 1, argv[0] )); 
+  }
+  arg1 = (ws2811_t *)(argp1);
+  ecode2 = SWIG_AsVal_int(argv[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), Ruby_Format_TypeError( "", "int","ws2811_channel_get", 2, argv[1] ));
+  } 
+  arg2 = (int)(val2);
+  result = (ws2811_channel_t *)ws2811_channel_get(arg1,arg2);
+  vresult = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_ws2811_channel_t, 0 |  0 );
+  return vresult;
 fail:
   return Qnil;
 }
@@ -2883,24 +2751,60 @@ fail:
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
-static swig_type_info _swigt__p_Color_t = {"_p_Color_t", "Color_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_dma_cb_t = {"_p_dma_cb_t", "dma_cb_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int = {"_p_int", "intptr_t *|int *|int_least32_t *|int_fast32_t *|int32_t *|int_fast16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_long_long = {"_p_long_long", "int_least64_t *|int_fast64_t *|int64_t *|long long *|intmax_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_short = {"_p_short", "short *|int_least16_t *|int16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_signed_char = {"_p_signed_char", "signed char *|int_least8_t *|int_fast8_t *|int8_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|uint_least8_t *|uint_fast8_t *|uint8_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_int = {"_p_unsigned_int", "uintptr_t *|uint_least32_t *|uint_fast32_t *|uint32_t *|unsigned int *|ws2811_led_t *|uint_fast16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_long_long = {"_p_unsigned_long_long", "uint_least64_t *|uint_fast64_t *|uint64_t *|unsigned long long *|uintmax_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_short = {"_p_unsigned_short", "unsigned short *|uint_least16_t *|uint16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_ws2811_channel_t = {"_p_ws2811_channel_t", "ws2811_channel_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_ws2811_device = {"_p_ws2811_device", "struct ws2811_device *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_ws2811_t = {"_p_ws2811_t", "ws2811_t *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
-  &_swigt__p_Color_t,
   &_swigt__p_char,
-  &_swigt__p_dma_cb_t,
+  &_swigt__p_int,
+  &_swigt__p_long_long,
+  &_swigt__p_short,
+  &_swigt__p_signed_char,
+  &_swigt__p_unsigned_char,
+  &_swigt__p_unsigned_int,
+  &_swigt__p_unsigned_long_long,
+  &_swigt__p_unsigned_short,
+  &_swigt__p_ws2811_channel_t,
+  &_swigt__p_ws2811_device,
+  &_swigt__p_ws2811_t,
 };
 
-static swig_cast_info _swigc__p_Color_t[] = {  {&_swigt__p_Color_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_dma_cb_t[] = {  {&_swigt__p_dma_cb_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_long_long[] = {  {&_swigt__p_long_long, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_short[] = {  {&_swigt__p_short, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_signed_char[] = {  {&_swigt__p_signed_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_int[] = {  {&_swigt__p_unsigned_int, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_long_long[] = {  {&_swigt__p_unsigned_long_long, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_short[] = {  {&_swigt__p_unsigned_short, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_ws2811_channel_t[] = {  {&_swigt__p_ws2811_channel_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_ws2811_device[] = {  {&_swigt__p_ws2811_device, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_ws2811_t[] = {  {&_swigt__p_ws2811_t, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
-  _swigc__p_Color_t,
   _swigc__p_char,
-  _swigc__p_dma_cb_t,
+  _swigc__p_int,
+  _swigc__p_long_long,
+  _swigc__p_short,
+  _swigc__p_signed_char,
+  _swigc__p_unsigned_char,
+  _swigc__p_unsigned_int,
+  _swigc__p_unsigned_long_long,
+  _swigc__p_unsigned_short,
+  _swigc__p_ws2811_channel_t,
+  _swigc__p_ws2811_device,
+  _swigc__p_ws2811_t,
 };
 
 
@@ -3162,50 +3066,47 @@ SWIGEXPORT void Init_lowlevel(void) {
   }
   
   SWIG_RubyInitializeTrackings();
+  rb_define_const(mLowlevel, "WS2811_TARGET_FREQ", SWIG_From_int((int)(800000)));
   
-  SwigClassColor_t.klass = rb_define_class_under(mLowlevel, "Color_t", rb_cObject);
-  SWIG_TypeClientData(SWIGTYPE_p_Color_t, (void *) &SwigClassColor_t);
-  rb_define_alloc_func(SwigClassColor_t.klass, _wrap_Color_t_allocate);
-  rb_define_method(SwigClassColor_t.klass, "initialize", _wrap_new_Color_t, -1);
-  rb_define_method(SwigClassColor_t.klass, "r=", _wrap_Color_t_r_set, -1);
-  rb_define_method(SwigClassColor_t.klass, "r", _wrap_Color_t_r_get, -1);
-  rb_define_method(SwigClassColor_t.klass, "g=", _wrap_Color_t_g_set, -1);
-  rb_define_method(SwigClassColor_t.klass, "g", _wrap_Color_t_g_get, -1);
-  rb_define_method(SwigClassColor_t.klass, "b=", _wrap_Color_t_b_set, -1);
-  rb_define_method(SwigClassColor_t.klass, "b", _wrap_Color_t_b_get, -1);
-  SwigClassColor_t.mark = 0;
-  SwigClassColor_t.destroy = (void (*)(void *)) free_Color_t;
-  SwigClassColor_t.trackObjects = 0;
-  rb_define_module_function(mLowlevel, "init", _wrap_init, -1);
-  rb_define_module_function(mLowlevel, "clear", _wrap_clear, -1);
-  rb_define_module_function(mLowlevel, "show", _wrap_show, -1);
-  rb_define_module_function(mLowlevel, "Wheel", _wrap_Wheel, -1);
-  rb_define_module_function(mLowlevel, "colorWipe", _wrap_colorWipe, -1);
-  rb_define_module_function(mLowlevel, "rainbow", _wrap_rainbow, -1);
-  rb_define_module_function(mLowlevel, "rainbowCycle", _wrap_rainbowCycle, -1);
-  rb_define_module_function(mLowlevel, "theaterChase", _wrap_theaterChase, -1);
-  rb_define_module_function(mLowlevel, "theaterChaseRainbow", _wrap_theaterChaseRainbow, -1);
-  rb_define_module_function(mLowlevel, "setBrightness", _wrap_setBrightness, -1);
-  rb_define_module_function(mLowlevel, "getBrightness", _wrap_getBrightness, -1);
-  rb_define_module_function(mLowlevel, "RGB2Color", _wrap_RGB2Color, -1);
-  rb_define_module_function(mLowlevel, "Color", _wrap_Color, -1);
-  rb_define_module_function(mLowlevel, "setPixelColor", _wrap_setPixelColor, -1);
-  rb_define_module_function(mLowlevel, "setPixelColorT", _wrap_setPixelColorT, -1);
-  rb_define_module_function(mLowlevel, "getPixelColor", _wrap_getPixelColor, -1);
-  rb_define_module_function(mLowlevel, "numPixels", _wrap_numPixels, -1);
-  rb_define_module_function(mLowlevel, "getPixels", _wrap_getPixels, -1);
-  rb_define_module_function(mLowlevel, "setPWMBit", _wrap_setPWMBit, -1);
-  rb_define_module_function(mLowlevel, "getPWMBit", _wrap_getPWMBit, -1);
-  rb_define_module_function(mLowlevel, "dumpLEDBuffer", _wrap_dumpLEDBuffer, -1);
-  rb_define_module_function(mLowlevel, "dumpPWMBuffer", _wrap_dumpPWMBuffer, -1);
-  rb_define_module_function(mLowlevel, "dumpPWMStatus", _wrap_dumpPWMStatus, -1);
-  rb_define_module_function(mLowlevel, "dumpPWMControl", _wrap_dumpPWMControl, -1);
-  rb_define_module_function(mLowlevel, "dumpPWMDMAC", _wrap_dumpPWMDMAC, -1);
-  rb_define_module_function(mLowlevel, "dumpPWM", _wrap_dumpPWM, -1);
-  rb_define_module_function(mLowlevel, "dumpDMARegs", _wrap_dumpDMARegs, -1);
-  rb_define_module_function(mLowlevel, "dumpControlBlock", _wrap_dumpControlBlock, -1);
-  rb_define_module_function(mLowlevel, "dumpTransferInformation", _wrap_dumpTransferInformation, -1);
-  rb_define_module_function(mLowlevel, "dumpDMA", _wrap_dumpDMA, -1);
-  rb_define_module_function(mLowlevel, "terminate", _wrap_terminate, -1);
+  SwigClassWs2811_channel_t.klass = rb_define_class_under(mLowlevel, "Ws2811_channel_t", rb_cObject);
+  SWIG_TypeClientData(SWIGTYPE_p_ws2811_channel_t, (void *) &SwigClassWs2811_channel_t);
+  rb_define_alloc_func(SwigClassWs2811_channel_t.klass, _wrap_ws2811_channel_t_allocate);
+  rb_define_method(SwigClassWs2811_channel_t.klass, "initialize", _wrap_new_ws2811_channel_t, -1);
+  rb_define_method(SwigClassWs2811_channel_t.klass, "gpionum=", _wrap_ws2811_channel_t_gpionum_set, -1);
+  rb_define_method(SwigClassWs2811_channel_t.klass, "gpionum", _wrap_ws2811_channel_t_gpionum_get, -1);
+  rb_define_method(SwigClassWs2811_channel_t.klass, "invert=", _wrap_ws2811_channel_t_invert_set, -1);
+  rb_define_method(SwigClassWs2811_channel_t.klass, "invert", _wrap_ws2811_channel_t_invert_get, -1);
+  rb_define_method(SwigClassWs2811_channel_t.klass, "count=", _wrap_ws2811_channel_t_count_set, -1);
+  rb_define_method(SwigClassWs2811_channel_t.klass, "count", _wrap_ws2811_channel_t_count_get, -1);
+  rb_define_method(SwigClassWs2811_channel_t.klass, "brightness=", _wrap_ws2811_channel_t_brightness_set, -1);
+  rb_define_method(SwigClassWs2811_channel_t.klass, "brightness", _wrap_ws2811_channel_t_brightness_get, -1);
+  rb_define_method(SwigClassWs2811_channel_t.klass, "leds=", _wrap_ws2811_channel_t_leds_set, -1);
+  rb_define_method(SwigClassWs2811_channel_t.klass, "leds", _wrap_ws2811_channel_t_leds_get, -1);
+  SwigClassWs2811_channel_t.mark = 0;
+  SwigClassWs2811_channel_t.destroy = (void (*)(void *)) free_ws2811_channel_t;
+  SwigClassWs2811_channel_t.trackObjects = 0;
+  
+  SwigClassWs2811_t.klass = rb_define_class_under(mLowlevel, "Ws2811_t", rb_cObject);
+  SWIG_TypeClientData(SWIGTYPE_p_ws2811_t, (void *) &SwigClassWs2811_t);
+  rb_define_alloc_func(SwigClassWs2811_t.klass, _wrap_ws2811_t_allocate);
+  rb_define_method(SwigClassWs2811_t.klass, "initialize", _wrap_new_ws2811_t, -1);
+  rb_define_method(SwigClassWs2811_t.klass, "device=", _wrap_ws2811_t_device_set, -1);
+  rb_define_method(SwigClassWs2811_t.klass, "device", _wrap_ws2811_t_device_get, -1);
+  rb_define_method(SwigClassWs2811_t.klass, "freq=", _wrap_ws2811_t_freq_set, -1);
+  rb_define_method(SwigClassWs2811_t.klass, "freq", _wrap_ws2811_t_freq_get, -1);
+  rb_define_method(SwigClassWs2811_t.klass, "dmanum=", _wrap_ws2811_t_dmanum_set, -1);
+  rb_define_method(SwigClassWs2811_t.klass, "dmanum", _wrap_ws2811_t_dmanum_get, -1);
+  rb_define_method(SwigClassWs2811_t.klass, "channel=", _wrap_ws2811_t_channel_set, -1);
+  rb_define_method(SwigClassWs2811_t.klass, "channel", _wrap_ws2811_t_channel_get, -1);
+  SwigClassWs2811_t.mark = 0;
+  SwigClassWs2811_t.destroy = (void (*)(void *)) free_ws2811_t;
+  SwigClassWs2811_t.trackObjects = 0;
+  rb_define_module_function(mLowlevel, "ws2811_init", _wrap_ws2811_init, -1);
+  rb_define_module_function(mLowlevel, "ws2811_fini", _wrap_ws2811_fini, -1);
+  rb_define_module_function(mLowlevel, "ws2811_render", _wrap_ws2811_render, -1);
+  rb_define_module_function(mLowlevel, "ws2811_wait", _wrap_ws2811_wait, -1);
+  rb_define_module_function(mLowlevel, "ws2811_led_get", _wrap_ws2811_led_get, -1);
+  rb_define_module_function(mLowlevel, "ws2811_led_set", _wrap_ws2811_led_set, -1);
+  rb_define_module_function(mLowlevel, "ws2811_channel_get", _wrap_ws2811_channel_get, -1);
 }
 

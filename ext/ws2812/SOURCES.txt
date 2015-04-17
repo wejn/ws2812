@@ -1,0 +1,2 @@
+lowlevel.i is https://github.com/pimoroni/unicorn-hat/blob/master/python/rpi-ws281x/rpi_ws281x.i
+*.[ch] are https://github.com/pimoroni/unicorn-hat/tree/master/python/rpi-ws281x/lib/*.[ch]
