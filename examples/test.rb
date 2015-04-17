@@ -25,18 +25,10 @@ module Ws2812
 
 			@leds = Ws2811_t.new
 
-			(0..1).each do |channum|
-				chan = ws2811_channel_get(@leds, channum)
-				chan.count = 0
-				chan.gpionum = 0
-				chan.invert = 0
-				chan.brightness = 0
-			end
-
 			@channel = ws2811_channel_get(@leds, channel)
 			@channel.count = num
 			@channel.gpionum = pin
-			@channel.invert = invert ? 0 : 1
+			@channel.invert = invert ? 1 : 0
 			@channel.brightness = brightness
 
 			@leds.freq = freq
