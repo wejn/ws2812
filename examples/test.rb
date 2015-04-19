@@ -42,16 +42,14 @@ module Ws2812
 		def open
 			return nil if @open
 			resp = ws2811_init(@leds)
-			unless resp.zero?
-				raise "init failed with code: " + resp
-			end
+			raise "init failed with code: " + resp.to_s + ", perhaps you need to run as root?" unless resp.zero?
 			@open = true
 			self
 		end
 
 		def close
-			@open = false
-			if @leds
+			if @open && @leds
+				@open = false
 				ws2811_fini(@leds)
 				@channel = nil # will GC the memory
 				@leds = nil
@@ -63,9 +61,7 @@ module Ws2812
 
 		def show
 			resp = ws2811_render(@leds)
-			unless resp.zero?
-				raise "show failed with code: " + resp
-			end
+			raise "show failed with code: " + resp.to_s unless resp.zero?
 		end
 
 		def []=(n, color)
@@ -116,4 +112,7 @@ if __FILE__ == $0
 	ws.brightness = 50
 	ws.show
 	p ws[(0..63)]
+	ws.brightness = 5
+	ws[(1..63)] = Ws2812::Color.new(0xff, 0, 0)
+	ws.show
 end
