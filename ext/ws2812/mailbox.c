@@ -273,28 +273,37 @@ int mbox_errno = MBOX_ERRNO_OK;
 
 int mbox_open(void) {
    int file_desc;
-   char filename[64];
+   char *filename = NULL;
 
    mbox_errno = MBOX_ERRNO_OK;
 
    // open a char device file used for communicating with kernel mbox driver
-   sprintf(filename, "/tmp/mailbox-%d", getpid());
+   filename = tempnam("/tmp", "mbox");
+   if (filename == NULL) {
+	   mbox_errno = MBOX_ERRNO_CANT_TEMPNAM;
+	   goto err;
+   }
    unlink(filename);
    if (mknod(filename, S_IFCHR|0600, makedev(100, 0)) < 0) {
       // printf("Failed to create mailbox device %s: %m\n", filename);
 	  mbox_errno = MBOX_ERRNO_CANT_MKNOD;
-      return -1;
+      goto err;
    }
    file_desc = open(filename, 0);
    if (file_desc < 0) {
       // printf("Can't open device file %s: %m\n", filename);
-      unlink(filename);
 	  mbox_errno = MBOX_ERRNO_CANT_OPEN;
-      return -1;
+      goto err;
    }
    unlink(filename);
 
    return file_desc;
+err:
+   if (filename != NULL) {
+	   unlink(filename);
+	   free(filename);
+   }
+   return -1;
 }
 
 void mbox_close(int file_desc) {
