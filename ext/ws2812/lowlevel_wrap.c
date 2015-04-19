@@ -2621,6 +2621,31 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_ws2811_dma_error_get(VALUE self) {
+  VALUE _val;
+  
+  _val = SWIG_From_unsigned_SS_int((unsigned int)(ws2811_dma_error));
+  return _val;
+}
+
+
+SWIGINTERN VALUE
+_wrap_ws2811_dma_error_set(VALUE self, VALUE _val) {
+  {
+    unsigned int val;
+    int res = SWIG_AsVal_unsigned_SS_int(_val, &val);
+    if (!SWIG_IsOK(res)) {
+      SWIG_exception_fail(SWIG_ArgError(res), "in variable '""ws2811_dma_error""' of type '""uint32_t""'");
+    }
+    ws2811_dma_error = (uint32_t)(val);
+  }
+  return _val;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_ws2811_wait(int argc, VALUE *argv, VALUE self) {
   ws2811_t *arg1 = (ws2811_t *) 0 ;
   void *argp1 = 0 ;
@@ -3104,6 +3129,8 @@ SWIGEXPORT void Init_lowlevel(void) {
   rb_define_module_function(mLowlevel, "ws2811_init", _wrap_ws2811_init, -1);
   rb_define_module_function(mLowlevel, "ws2811_fini", _wrap_ws2811_fini, -1);
   rb_define_module_function(mLowlevel, "ws2811_render", _wrap_ws2811_render, -1);
+  rb_define_singleton_method(mLowlevel, "ws2811_dma_error", _wrap_ws2811_dma_error_get, 0);
+  rb_define_singleton_method(mLowlevel, "ws2811_dma_error=", _wrap_ws2811_dma_error_set, 1);
   rb_define_module_function(mLowlevel, "ws2811_wait", _wrap_ws2811_wait, -1);
   rb_define_module_function(mLowlevel, "ws2811_led_get", _wrap_ws2811_led_get, -1);
   rb_define_module_function(mLowlevel, "ws2811_led_set", _wrap_ws2811_led_set, -1);
