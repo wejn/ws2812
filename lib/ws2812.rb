@@ -5,3 +5,5 @@ end
 unless $__WS2812_SKIP_LL
 	require 'ws2812/lowlevel'
 end
+require 'ws2812/color'
+require 'ws2812/basic'

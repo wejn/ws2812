@@ -1,5 +1,5 @@
 +0) fix crash for non-root users
-1) move NeoPixel from example to lib
++1) move NeoPixel from example to lib
 2) port unicornhat.py
 3) figure out gemspec (platform, authors, etc)
 4) figure out license, etc
