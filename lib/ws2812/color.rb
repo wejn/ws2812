@@ -22,5 +22,12 @@ module Ws2812
 		def self.from_i(i)
 			Color.new((i >> 16) & 0xff, (i >> 8) & 0xff, i & 0xff)
 		end
+
+
+		# Makes sense to represent color as hex, right?
+		def to_hex
+			"#%02x%02x%02x" % [r & 0xff, g & 0xff, b & 0xff]
+		end
+		alias_method :to_s, :to_hex
 	end
 end
