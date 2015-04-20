@@ -7,3 +7,4 @@ unless $__WS2812_SKIP_LL
 end
 require 'ws2812/color'
 require 'ws2812/basic'
+require 'ws2812/matrix'
