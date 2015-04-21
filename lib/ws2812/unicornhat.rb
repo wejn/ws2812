@@ -129,11 +129,10 @@ module Ws2812
 		end
 
 		##
-		# Clears all pixels (sets them to black)
-		#
-		# You still have to call +show+ to make the changes visible.
-		def clear
+		# Clears all pixels (sets them to black) and calls +show+ if +do_show+
+		def clear(do_show = true)
 			set_all(Color.new(0, 0, 0))
+			show if do_show
 		end
 
 		##
