@@ -27,13 +27,21 @@ hat.show
 
 sleep 0.5
 
-# rotate around 20 times
-20.times do
-	# rotate around
-	for rot in [90, 180, 270, 0]
-		hat.rotation = rot
-		hat.show
+# rotate around till ^C
+puts "Spinning... ^C to terminate"
+begin
+	loop do
+		# rotate around
+		for rot in [90, 180, 270, 0]
+			hat.rotation = rot
+			hat.show
 
-		sleep 0.5
+			sleep 0.5
+		end
 	end
+rescue Interrupt
 end
+
+# Clear the display at the end
+hat.clear
+hat.show

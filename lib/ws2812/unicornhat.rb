@@ -62,18 +62,22 @@ module Ws2812
 		# Set given pixel identified by +x+, +y+ to +color+
 		#
 		# See +set+ for a method that takes individual +r+, +g+, +b+
-		# components
+		# components.
+		#
+		# You still have to call +show+ to make the changes visible.
 		def []=(x, y, color)
 			check_coords(x, y)
 			@pixels[x][y] = color
-			@hat[map(x, y)] = color
+			@hat[map_coords(x, y)] = color
 		end
 
 		##
 		# Set given pixel identified by +x+, +y+ to +r+, +g+, +b+
 		#
 		# See <tt>[]=</tt> for a method that takes +Color+ instance instead
-		# of individual components
+		# of individual components.
+		#
+		# You still have to call +show+ to make the changes visible.
 		def set(x, y, r, g, b)
 			check_coords(x, y)
 			self[x, y] = Color.new(r, g, b)
@@ -84,6 +88,8 @@ module Ws2812
 		#
 		# The value is from +0+ to +255+ and is internally used as a scaler
 		# for all colors values that are supplied via <tt>[]=</tt>
+		#
+		# You still have to call +show+ to make the changes visible.
 		def brightness=(val)
 			@hat.brightness = val
 		end
@@ -103,12 +109,18 @@ module Ws2812
 			@pixels[x][y]
 		end
 
-		# FIXME: docs
+		##
+		# Returns current rotation as integer; one of: [0, 90, 180, 270]
 		def rotation
 			@rotation
 		end
 
-		# FIXME: docs
+		##
+		# Set rotation of the Unicorn HAT to +val+
+		#
+		# Permissible values for rotation are [0, 90, 180, 270] (mod 360).
+		#
+		# You still have to call +show+ to make the changes visible.
 		def rotation=(val)
 			permissible = [0, 90, 180, 270]
 			fail ArgumentError, "invalid rotation, permissible: #{permissible.join(', ')}" unless permissible.include?(val % 360)
@@ -116,19 +128,42 @@ module Ws2812
 			push_all_pixels
 		end
 
-		# FIXME: docs
+		##
+		# Clears all pixels (sets them to black)
+		#
+		# You still have to call +show+ to make the changes visible.
+		def clear
+			set_all(Color.new(0, 0, 0))
+		end
+
+		##
+		# Sets all pixels to +color+
+		#
+		# You still have to call +show+ to make the changes visible.
+		def set_all(color)
+			0.upto(7) do |x|
+				0.upto(7) do |y|
+					self[x, y] = color
+				end
+			end
+		end
+
+		##
+		# Pushes all pixels from buffer to the lower level (physical device)
 		def push_all_pixels
 			0.upto(7) do |x|
 				0.upto(7) do |y|
-					@hat[map(x, y)] = @pixels[x][y]
+					@hat[map_coords(x, y)] = @pixels[x][y]
 				end
 			end
 		end
 		private :push_all_pixels
 
 
-		# FIXME: docs
-		def map(x, y)
+		##
+		# Maps +x+, +y+ coordinates to index on the physical matrix
+		# (takes rotation into account)
+		def map_coords(x, y)
 			check_coords(x, y)
 			y = 7 - y
 			case rotation
@@ -142,6 +177,7 @@ module Ws2812
 
 			UHAT_MAP[x][y]
 		end
+		private :map_coords
 
 		##
 		# Verify supplied coords +x+ and +y+
