@@ -3,7 +3,7 @@ $:.unshift(File.expand_path('../../lib', __FILE__))
 require 'ws2812'
 
 # Init
-hat = Ws2812::UnicornHAT.new(18)
+hat = Ws2812::UnicornHAT.new
 
 # first corner set to red
 red = Ws2812::Color.new(0xff, 0, 0)

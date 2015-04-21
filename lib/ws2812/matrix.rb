@@ -25,7 +25,7 @@ module Ws2812
 		#
 		# The +options+ hash can contain various additional options,
 		# see +Basic+ class' description of options for more details.
-		def initialize(pin, brightness = 50, options = {})
+		def initialize(pin = 18, brightness = 50, options = {})
 			@hat = Basic.new(64, pin, brightness, options)
 			@hat.open
 
