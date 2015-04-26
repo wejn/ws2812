@@ -149,6 +149,10 @@ module Ws2812
 
 		##
 		# Pushes all pixels from buffer to the lower level (physical device)
+		#
+		# This is internally used when changing rotation but it can be useful
+		# when you set several pixels to the same Color instance and then
+		# manipulate those pixels' color all at once.
 		def push_all_pixels
 			0.upto(7) do |x|
 				0.upto(7) do |y|
@@ -156,7 +160,6 @@ module Ws2812
 				end
 			end
 		end
-		private :push_all_pixels
 
 
 		##
