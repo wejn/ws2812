@@ -7,15 +7,18 @@ class Digit
 	VALUES = {
 		n => [ 0b000, 0b000, 0b000, 0b000, 0b000, ],
 		0 => [ 0b111, 0b101, 0b101, 0b101, 0b111, ],
-		1 => [ 0b010, 0b110, 0b010, 0b010, 0b010, ],
+		#1 => [ 0b010, 0b110, 0b010, 0b010, 0b010, ], # 1 in the middle
+		1 => [ 0b001, 0b011, 0b001, 0b001, 0b001, ], # 1 at the left
 		2 => [ 0b111, 0b001, 0b111, 0b100, 0b111, ],
 		3 => [ 0b111, 0b001, 0b111, 0b001, 0b111, ],
 		4 => [ 0b101, 0b101, 0b111, 0b001, 0b001, ],
 		5 => [ 0b111, 0b100, 0b111, 0b001, 0b111, ],
-		6 => [ 0b100, 0b100, 0b111, 0b101, 0b111, ],
+		#6 => [ 0b111, 0b100, 0b111, 0b101, 0b111, ], # "full" six
+		6 => [ 0b100, 0b100, 0b111, 0b101, 0b111, ], # "sparse" six
 		7 => [ 0b111, 0b001, 0b001, 0b001, 0b001, ],
 		8 => [ 0b111, 0b101, 0b111, 0b101, 0b111, ],
-		9 => [ 0b111, 0b101, 0b111, 0b001, 0b001, ],
+		#9 => [ 0b111, 0b101, 0b111, 0b001, 0b111, ], # "full" nine
+		9 => [ 0b111, 0b101, 0b111, 0b001, 0b001, ], # "sparse" nine
 	}
 
 	def initialize(hat, x, y, color, off_color = nil)
@@ -58,7 +61,7 @@ class TwoDigit
 
 	def show(value, do_show = false, &pixel_set)
 		tens_value = value / 10
-		tens_value = nil unless @leading_zero
+		tens_value = nil if !@leading_zero && tens_value.zero?
 		@tens.show(tens_value, false, &pixel_set)
 		@singles.show(value % 10, false, &pixel_set)
 		@hat.show if do_show
@@ -86,34 +89,66 @@ class TwoDigit
 	end
 end
 
-# Init
-hat = Ws2812::UnicornHAT.new
-hat.rotation = 180
-red = Ws2812::Color.new(0xff, 0, 0)
-green = Ws2812::Color.new(0, 0xff, 0)
-h = TwoDigit.new(hat, 0, 0, red)
-m = TwoDigit.new(hat, 1, 3, green)
-m.leading_zero = true
-red_ps = proc do |hat, x, y, color|
-	oldc = hat[x, y]
-	hat[x, y] = Ws2812::Color.new(color.r, oldc.g, oldc.b)
-end
-green_ps = proc do |hat, x, y, color|
-	oldc = hat[x, y]
-	hat[x, y] = Ws2812::Color.new(oldc.r, color.g, oldc.b)
-end
+if __FILE__ == $0
+	# Init
+	hat = Ws2812::UnicornHAT.new
+	#hat.brightness = 6 # triggers a bug in flip-mode (pixels go to black)
+	# fixing it would take using direct mode with our own gamma correction
+	hat.brightness = 20
+	hat.rotation = 180
+	black = Ws2812::Color.new(0, 0, 0)
+	red = Ws2812::Color.new(0xff, 0, 0)
+	green = Ws2812::Color.new(0, 0xaa, 0)
+	both = Ws2812::Color.new(0xff, 0xaa, 0)
+	h = TwoDigit.new(hat, 0, 0, red, black)
+	m = TwoDigit.new(hat, 1, 3, green, black)
+	m.leading_zero = true
 
-begin
-	loop do	
-		t = Time.now
-		h.show(t.hour, false, &red_ps)
-		m.show(t.min, false, &green_ps)
-		hat.show
-		left = (59-t.sec)
-		sleep left <= 0 ? 0 : left
+	green_ps = proc do |hat, x, y, color|
+		if hat[x, y] == red
+			hat[x, y] = both if color == green
+			# otherwise stays red
+		else
+			hat[x, y] = color
+		end
 	end
-rescue Interrupt
-end
 
-# cleanup
-hat.clear
+	begin
+		ticks = 25
+		tick = 0
+		direction = 1
+		ot = nil
+		loop do	
+			t = Time.now
+
+			# set the display anew if hour/minute changed
+			if ot.nil? || (ot.hour != t.hour || ot.min != t.min)
+				ot = t
+				hat.clear(false)
+				h.show(t.hour, false)
+				m.show(t.min, false, &green_ps)
+			end
+
+
+			# animate "both" pixels (where hour & minute overlay)
+			both.r = (red.r * tick.to_f/ticks).to_i
+			both.g = (green.g * ((ticks - tick).to_f/ticks)).to_i
+			hat.push_all_pixels
+
+			if direction > 0
+				direction = -1 if tick + 1 >= ticks
+				tick = tick + 1
+			else
+				direction = 1 if tick - 1 <= 0
+				tick = tick - 1
+			end
+
+			hat.show
+			sleep 0.1
+		end
+	rescue Interrupt
+	end
+
+	# cleanup
+	hat.clear
+end
