@@ -1962,6 +1962,29 @@ SWIG_From_unsigned_SS_int  (unsigned int value)
 }
 
 
+SWIGINTERNINLINE VALUE
+SWIG_From_unsigned_SS_char  (unsigned char value)
+{    
+  return SWIG_From_unsigned_SS_long  (value);
+}
+
+
+SWIGINTERN int
+SWIG_AsVal_unsigned_SS_char (VALUE obj, unsigned char *val)
+{
+  unsigned long v;
+  int res = SWIG_AsVal_unsigned_SS_long (obj, &v);
+  if (SWIG_IsOK(res)) {
+    if ((v > UCHAR_MAX)) {
+      return SWIG_OverflowError;
+    } else {
+      if (val) *val = (unsigned char)(v);
+    }
+  }  
+  return res;
+}
+
+
     uint32_t ws2811_led_get(ws2811_channel_t *channel, int lednum)
     {
         if (lednum >= channel->count)
@@ -2597,6 +2620,31 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_ws2811_direct_colors_get(VALUE self) {
+  VALUE _val;
+  
+  _val = SWIG_From_unsigned_SS_char((unsigned char)(ws2811_direct_colors));
+  return _val;
+}
+
+
+SWIGINTERN VALUE
+_wrap_ws2811_direct_colors_set(VALUE self, VALUE _val) {
+  {
+    unsigned char val;
+    int res = SWIG_AsVal_unsigned_SS_char(_val, &val);
+    if (!SWIG_IsOK(res)) {
+      SWIG_exception_fail(SWIG_ArgError(res), "in variable '""ws2811_direct_colors""' of type '""uint8_t""'");
+    }
+    ws2811_direct_colors = (uint8_t)(val);
+  }
+  return _val;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_ws2811_render(int argc, VALUE *argv, VALUE self) {
   ws2811_t *arg1 = (ws2811_t *) 0 ;
   void *argp1 = 0 ;
@@ -3128,6 +3176,8 @@ SWIGEXPORT void Init_lowlevel(void) {
   SwigClassWs2811_t.trackObjects = 0;
   rb_define_module_function(mLowlevel, "ws2811_init", _wrap_ws2811_init, -1);
   rb_define_module_function(mLowlevel, "ws2811_fini", _wrap_ws2811_fini, -1);
+  rb_define_singleton_method(mLowlevel, "ws2811_direct_colors", _wrap_ws2811_direct_colors_get, 0);
+  rb_define_singleton_method(mLowlevel, "ws2811_direct_colors=", _wrap_ws2811_direct_colors_set, 1);
   rb_define_module_function(mLowlevel, "ws2811_render", _wrap_ws2811_render, -1);
   rb_define_singleton_method(mLowlevel, "ws2811_dma_error", _wrap_ws2811_dma_error_get, 0);
   rb_define_singleton_method(mLowlevel, "ws2811_dma_error=", _wrap_ws2811_dma_error_set, 1);

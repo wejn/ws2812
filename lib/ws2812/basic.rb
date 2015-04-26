@@ -54,6 +54,19 @@ module Ws2812
 		end
 
 		##
+		# Is gamma correction (brightness) bypassed?
+		def direct?
+			!Ws2812::Lowlevel.ws2811_direct_colors.zero?
+		end
+
+		##
+		# Instruct lowlevel driver to bypass gamma correction (brightness)
+		# and use the color values straight as they are given
+		def direct=(value)
+			Ws2812::Lowlevel.ws2811_direct_colors = !!value ? 1 : 0
+		end
+
+		##
 		# Actually opens (initializes) communication with the LED strand
 		#
 		# Raises an exception when the initialization fails.
