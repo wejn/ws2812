@@ -5,7 +5,13 @@ end
 # to make it all less confusing
 WS2812 = Ws2812
 
-unless $__WS2812_SKIP_LL
+if $__WS2812_SKIP_LL
+	module Ws2812
+		module Lowlevel
+			# XXX: could provide full blown emulation of all calls? :)
+		end
+	end
+else
 	require 'ws2812/lowlevel'
 end
 require 'ws2812/color'

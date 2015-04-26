@@ -1,4 +1,5 @@
 # encoding: utf-8
+$:.unshift(File.expand_path('../lib', __FILE__))
 require 'rake/extensiontask'
 $__WS2812_SKIP_LL = true
 require_relative 'lib/ws2812'
