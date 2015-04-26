@@ -5,7 +5,7 @@ module Ws2812
 		def initialize(r, g, b)
 			@r, @g, @b = r, g, b
 		end
-		attr :r, :g, :b
+		attr_accessor :r, :g, :b
 
 		##
 		# Converts color to integer by encoding +r+, +g+, +b+
