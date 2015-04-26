@@ -37,6 +37,17 @@ module Ws2812
 			raise
 		end
 
+		# Query direct mode. See <em>Ws2812::Basic</em> for explanation.
+		def direct?
+			@hat.direct?
+		end
+
+		##
+		# Set direct mode. See <em>Ws2812::Basic</em> for explanation.
+		def direct=(value)
+			@hat.direct = value
+		end
+
 		##
 		# Closes (deinitializes) communication with the matrix
 		#
