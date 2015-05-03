@@ -17,3 +17,4 @@ end
 require 'ws2812/color'
 require 'ws2812/basic'
 require 'ws2812/unicornhat'
+require 'ws2812/gamma_correction'
