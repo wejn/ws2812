@@ -12,7 +12,17 @@ As this is a published Ruby gem,
 ```
 gem install ws2812
 ```
-should be enough.
+should be enough. But the examples will be hidden in 'gems' dir.
+
+If you want to avoid the gem route, the following works just as well:
+```
+git clone https://github.com/wejn/ws2812
+cd ws2812
+gem install rake rake-compiler
+rake compile
+# and then, to demo it:
+sudo ruby examples/digiclock.rb
+```
 
 # Examples
 See the [examples](https://github.com/wejn/ws2812/tree/master/examples)
