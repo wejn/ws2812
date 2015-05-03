@@ -2,6 +2,7 @@
 $:.unshift(File.expand_path('../../lib', __FILE__))
 require 'ws2812'
 
+# Single 3x5 pixels "digit" (think 7-segment display)
 class Digit
 	n = nil # just to have the table below pretty
 	VALUES = {
@@ -49,6 +50,8 @@ class Digit
 	private :default_pixel_set
 end
 
+# Two Digits next to each other with one pixel gap
+# (think two 7-segment displays next to each other)
 class TwoDigits
 	def initialize(hat, x, y, color, off_color = nil)
 		@tens = Digit.new(hat, x, y, color, off_color)
@@ -94,8 +97,13 @@ if __FILE__ == $0
 	hat = Ws2812::UnicornHAT.new
 	hat.rotation = 180
 
-	gc = Ws2812::GammaCorrection.new(20)
+	gc = Ws2812::GammaCorrection.new(20) # => "brightness" set to 20
 	hat.direct = true
+	# Note: I'm using direct mode with custom +gc+ here so I can better
+	# "animate" the pixels where hours and minutes overlap (both set)
+	#
+	# Without direct mode you're flying blind and changing the uncorrected
+	# values, while possible, looks fugly in lower brightness (i.e. 20)
 	black = gc.correct(Ws2812::Color.new(0, 0, 0))
 	red = gc.correct(Ws2812::Color.new(0xff, 0, 0))
 	green = gc.correct(Ws2812::Color.new(0, 0xaa, 0))
@@ -104,6 +112,10 @@ if __FILE__ == $0
 	m = TwoDigits.new(hat, 1, 3, green, black)
 	m.leading_zero = true
 
+	# The following proc block allows us to merge individual red+green pixels
+	# into one aggregate "both" pixel (same Ws2812::Color instance). Thus
+	# allowing us to change one value (and then call +#push_all_pixels+) for
+	# update of the whole array.
 	green_ps = proc do |hat, x, y, color|
 		if hat[x, y] == red
 			hat[x, y] = both if color == green
