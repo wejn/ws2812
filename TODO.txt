@@ -3,5 +3,5 @@
 +2) port unicornhat.py
 +3) figure out gemspec (platform, authors, etc)
 +4) figure out license, etc
-5) add more examples
++5) add more examples
 6) push out v1
