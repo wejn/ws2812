@@ -49,7 +49,7 @@ class Digit
 	private :default_pixel_set
 end
 
-class TwoDigit
+class TwoDigits
 	def initialize(hat, x, y, color, off_color = nil)
 		@tens = Digit.new(hat, x, y, color, off_color)
 		@singles = Digit.new(hat, x + 4, y, color, off_color)
@@ -100,8 +100,8 @@ if __FILE__ == $0
 	red = gc.correct(Ws2812::Color.new(0xff, 0, 0))
 	green = gc.correct(Ws2812::Color.new(0, 0xaa, 0))
 	both = gc.correct(Ws2812::Color.new(0xff, 0xaa, 0))
-	h = TwoDigit.new(hat, 0, 0, red, black)
-	m = TwoDigit.new(hat, 1, 3, green, black)
+	h = TwoDigits.new(hat, 0, 0, red, black)
+	m = TwoDigits.new(hat, 1, 3, green, black)
 	m.leading_zero = true
 
 	green_ps = proc do |hat, x, y, color|
