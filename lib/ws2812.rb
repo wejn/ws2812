@@ -1,5 +1,5 @@
 module Ws2812
-	VERSION = "0.0.1"
+	VERSION = "0.0.2"
 end
 
 # to make it all less confusing

@@ -6,19 +6,22 @@ require_relative 'lib/ws2812'
 
 spec = Gem::Specification.new do |s|
 	s.name = 'ws2812'
-	s.platform = Gem::Platform::CURRENT
+	s.platform = Gem::Platform::RUBY
 	s.extensions = FileList["ext/**/extconf.rb"]
 	s.version = Ws2812::VERSION
-	s.date = '2015-04-16'
+	s.date = '2015-05-03'
 	s.summary = 'Ruby wrapper around WS2812 LED driver for Raspberry Pi'
-	s.description = 'Gem that encapsulates modified RaspberryPi-NeoPixel-WS2812 library from UnicornHat to help drive your WS2812 led chain from RaspberryPi'
-	s.authors = ['Michal Jirků']
+	s.description = 'Gem that encapsulates modified RPi ws281x library from UnicornHat to help drive your WS2812 led chain (or matrix) from RaspberryPi'
+	s.authors = ['Michal Jirků', 'Pimoroni', 'Richard Hirst', 'Jeremy Garff']
 	s.email = 'box@wejn.org'
 	s.files = `git ls-files -z`.split("\x0")
 	s.homepage = 'https://rubygems.org/gem/ws2812'
-	s.license = 'GPL'
+	s.license = 'GPL-2.0'
 	s.add_development_dependency "rake"
 	s.add_development_dependency "rake-compiler"
+	s.metadata = {
+		'source_code_uri' => 'https://github.com/wejn/ws2812'
+	}
 end
 
 Gem::PackageTask.new(spec) do |pkg|
