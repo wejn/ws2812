@@ -15,13 +15,10 @@ spec = Gem::Specification.new do |s|
 	s.authors = ['Michal Jirků', 'Pimoroni', 'Richard Hirst', 'Jeremy Garff']
 	s.email = 'box@wejn.org'
 	s.files = `git ls-files -z`.split("\x0")
-	s.homepage = 'https://rubygems.org/gem/ws2812'
+	s.homepage = 'https://github.com/wejn/ws2812'
 	s.license = 'GPL-2.0'
 	s.add_development_dependency "rake"
 	s.add_development_dependency "rake-compiler"
-	s.metadata = {
-		'source_code_uri' => 'https://github.com/wejn/ws2812'
-	}
 end
 
 Gem::PackageTask.new(spec) do |pkg|
