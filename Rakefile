@@ -30,10 +30,3 @@ Rake::ExtensionTask.new "ws2812" do |ext|
 	ext.lib_dir = 'lib/ws2812'
 	ext.gem_spec = spec
 end
-
-task :clobber => :clobber_extras
-task :clobber_extras do
-	Dir.chdir('ext/ws2812/lib') do
-		system('make', 'clean')
-	end
-end
