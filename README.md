@@ -18,7 +18,12 @@ If you want to avoid the gem route, the following works just as well:
 ```
 git clone https://github.com/wejn/ws2812
 cd ws2812
-gem install rake rake-compiler
+# Assuming raspbian here; otherwise make sure you have 'mkmf'
+# and can compile exts (failing that "rake compile" will bomb on you)
+sudo apt-get update
+sudo apt-get install -y ruby-full
+# .
+sudo gem install rake rake-compiler
 rake compile
 # and then, to demo it:
 sudo ruby examples/digiclock.rb
