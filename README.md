@@ -9,13 +9,13 @@ These WS281x LEDs are sometimes also known as NeoPixels.
 
 # Installation
 As this is a published Ruby gem,
-```
+```bash
 gem install ws2812
 ```
 should be enough. But the examples will be hidden in 'gems' dir.
 
 If you want to avoid the gem route, the following works just as well:
-```
+```bash
 git clone https://github.com/wejn/ws2812
 cd ws2812
 # Assuming raspbian here; otherwise make sure you have 'mkmf'
