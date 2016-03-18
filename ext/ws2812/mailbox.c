@@ -101,8 +101,7 @@ static int mbox_property(int file_desc, void *buf)
       ret_val = ioctl(fd, IOCTL_MBOX_PROPERTY, buf);
 
       if (ret_val < 0) {
-         // printf("ioctl_set_msg failed, errno %d: %m\n", errno);
-		 // XXX: this is apparently the only error, so why would we bother anyone?
+         printf("ioctl_set_msg failed, errno %d: %m\n", errno);
       }
    }
 #ifdef DEBUG
@@ -268,42 +267,33 @@ unsigned execute_qpu(int file_desc, unsigned num_qpus, unsigned control, unsigne
    return p[5];
 }
 
-// mbox_open errors go here
-int mbox_errno = MBOX_ERRNO_OK;
-
 int mbox_open(void) {
    int file_desc;
-   char *filename = NULL;
-
-   mbox_errno = MBOX_ERRNO_OK;
+   char filename[64];
 
    // open a char device file used for communicating with kernel mbox driver
-   filename = tempnam("/tmp", "mbox");
-   if (filename == NULL) {
-	   mbox_errno = MBOX_ERRNO_CANT_TEMPNAM;
-	   goto err;
-   }
-   unlink(filename);
-   if (mknod(filename, S_IFCHR|0600, makedev(100, 0)) < 0) {
-      // printf("Failed to create mailbox device %s: %m\n", filename);
-	  mbox_errno = MBOX_ERRNO_CANT_MKNOD;
-      goto err;
-   }
+
+   sprintf(filename, "/dev/vcio");
    file_desc = open(filename, 0);
-   if (file_desc < 0) {
-      // printf("Can't open device file %s: %m\n", filename);
-	  mbox_errno = MBOX_ERRNO_CANT_OPEN;
-      goto err;
+
+   if( file_desc < 0 ){
+     printf("Failed to open %s, trying old method.\n", filename);
+     sprintf(filename, "/dev/mailbox-%d", getpid());
+     unlink(filename);
+     if (mknod(filename, S_IFCHR|0600, makedev(100, 0)) < 0) {
+        printf("Failed to create mailbox device %s: %m\n", filename);
+        return -1;
+     }
+     file_desc = open(filename, 0);
    }
-   unlink(filename);
+   if (file_desc < 0) {
+      printf("Can't open device file %s: %m\n", filename);
+      //unlink(filename);
+      return -1;
+   }
+   //unlink(filename);
 
    return file_desc;
-err:
-   if (filename != NULL) {
-	   unlink(filename);
-	   free(filename);
-   }
-   return -1;
 }
 
 void mbox_close(int file_desc) {
