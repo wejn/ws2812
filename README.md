@@ -38,7 +38,8 @@ GNU General Public License v. 2, see [LICENSE.txt](LICENSE.txt).
 
 # Authors
 This gem (all of the ruby code and some tweaks to the C extension) was
-created by Michal Jirků <box@wejn.org>.
+originally created by Michal Jirků <box@wejn.org>, later extended by
+Philip Howard <phil@gadgetoid.com> to support newer Pi-s.
 
 And it wouldn't be possible without the original UnicornHAT repo.
 
