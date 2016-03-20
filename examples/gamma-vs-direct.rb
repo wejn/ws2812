@@ -6,7 +6,7 @@ require 'ws2812'
 n = 64 # num leds
 ws = Ws2812::Basic.new(n, 18) # +n+ leds at pin 18, using defaults
 ws.open
-ws.brightness = 255
+ws.brightness = 128
 if ARGV.first
 	puts 'Using direct mode.'
 	puts 'Remove all positional parameters to switch to gamma-corrected mode.'
@@ -17,14 +17,14 @@ else
 end
 
 # up...
-0.upto(255) do |i|
+0.upto(128) do |i|
 	ws[0..63] = Ws2812::Color.new(i, i, i)
 	ws.show
 	sleep 0.01
 end
 
 # and down...
-255.downto(0) do |i|
+128.downto(0) do |i|
 	ws[0..63] = Ws2812::Color.new(i, i, i)
 	ws.show
 	sleep 0.01

@@ -562,11 +562,6 @@ void ws2811_fini(ws2811_t *ws2811)
 }
 
 /**
- * Contains any errors from executing ws2811_wait
- */
-uint32_t ws2811_dma_error = 0;
-
-/**
  * Wait for any executing DMA operation to complete before returning.
  *
  * @param    ws2811  ws2811 instance pointer.
@@ -585,18 +580,20 @@ int ws2811_wait(ws2811_t *ws2811)
 
     if (dma->cs & RPI_DMA_CS_ERROR)
     {
-        // fprintf(stderr, "DMA Error: %08x\n", dma->debug);
-		ws2811_dma_error = dma->debug;
+        fprintf(stderr, "DMA Error: %08x\n", dma->debug);
         return -1;
     }
 
     return 0;
 }
 
+
+
 /**
  * Setting to non-zero bypasses brightness
  */
 uint8_t ws2811_direct_colors = 0;
+
 
 /**
  * Render the PWM DMA buffer from the user supplied LED arrays and start the DMA
@@ -621,16 +618,17 @@ int ws2811_render(ws2811_t *ws2811)
         for (i = 0; i < channel->count; i++)                // Led
         {
             uint8_t color[] = {0, 0, 0};
-
-            color[0] = (channel->leds[i] >> 8) & 0xff; // green
-            color[1] = (channel->leds[i] >> 16) & 0xff; // red
-            color[2] = (channel->leds[i] >> 0) & 0xff; // blue
-            if (ws2811_direct_colors == 0) {
-                // apply the gamma table
-                color[0] = (ws281x_gamma[color[0]] * scale) >> 8; // green
-                color[1] = (ws281x_gamma[color[1]] * scale) >> 8; // red
-                color[2] = (ws281x_gamma[color[2]] * scale) >> 8; // blue
+            
+            if (ws2811_direct_colors == 0){
+                color[0] = (ws281x_gamma[((channel->leds[i] >> 8)  & 0xff)] * scale) >> 8; // green
+                color[1] = (ws281x_gamma[((channel->leds[i] >> 16) & 0xff)] * scale) >> 8; // red
+                color[2] = (ws281x_gamma[((channel->leds[i] >> 0)  & 0xff)] * scale) >> 8; // blue
             }
+            else {
+                color[0] = (channel->leds[i] >> 8) & 0xff;  // green
+                color[1] = (channel->leds[i] >> 16) & 0xff; // red
+                color[2] = (channel->leds[i] >> 0) & 0xff;  // blue
+            };
 
             for (j = 0; j < ARRAY_SIZE(color); j++)        // Color
             {
