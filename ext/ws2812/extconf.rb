@@ -9,16 +9,3 @@ unless FileTest.exists?(File.dirname(__FILE__) + '/lowlevel_wrap.c')
 end
 
 create_makefile 'ws2812/lowlevel'
-
-File.open('Makefile', 'at') do |mk|
-	mk.puts <<EOF
-clean: clean-rpilowlevel
-distclean: distclean-rpilowlevel
-
-clean-rpilowlevel:
-	rm -f Makefile
-
-distclean-rpilowlevel:
-	rm -f *_wrap.c
-EOF
-end
