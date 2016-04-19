@@ -562,6 +562,11 @@ void ws2811_fini(ws2811_t *ws2811)
 }
 
 /**
+ * Contains any errors from executing ws2811_wait
+ */
+uint32_t ws2811_dma_error = 0;
+
+/**
  * Wait for any executing DMA operation to complete before returning.
  *
  * @param    ws2811  ws2811 instance pointer.
@@ -580,7 +585,8 @@ int ws2811_wait(ws2811_t *ws2811)
 
     if (dma->cs & RPI_DMA_CS_ERROR)
     {
-        fprintf(stderr, "DMA Error: %08x\n", dma->debug);
+        // fprintf(stderr, "DMA Error: %08x\n", dma->debug);
+		ws2811_dma_error = dma->debug;
         return -1;
     }
 

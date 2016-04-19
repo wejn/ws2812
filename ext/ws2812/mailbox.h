@@ -30,6 +30,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define MAJOR_NUM 100
 #define IOCTL_MBOX_PROPERTY _IOWR(MAJOR_NUM, 0, char *)
 
+#define MBOX_ERRNO_OK 0
+#define MBOX_ERRNO_CANT_MKNOD 1
+#define MBOX_ERRNO_CANT_OPEN 2
+// mbox_open errors go here
+extern int mbox_errno;
+
 int mbox_open(void);
 void mbox_close(int file_desc);
 
