@@ -34,6 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdint.h>
 #include <errno.h>
 #include <sys/mman.h>
+#include <sys/sysmacros.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
